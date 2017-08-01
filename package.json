@@ -1,0 +1,19 @@
+{
+    "name": "pc-monitor-alerter",
+    "version": "0.0.0",
+    "description": "Monitors PC temperatures, alerts if temps go over a threshold.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": ["temperature", "alerter", "cpu"],
+    "author": "Si Levy",
+    "license": "ISC",
+    "dependencies": {
+        "moment": "^2.18.1",
+        "node-powershell": "^3.1.1",
+        "node-wmi": "0.0.4",
+        "systeminformation": "^3.23.7",
+        "xml2js": "^0.4.17"
+    }
+}
