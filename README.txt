@@ -3,9 +3,10 @@ info to watch
 - cpu, gpu utilisation
 - hdd space
 - system errors
-- system responsive up time
-- network up time
+- system responsive up time? http://www.winhelponline.com/blog/incorrect-uptime-taskmgr-wmi-refresh/
+- network up time - https://github.com/Financial-Times/node-health-check/blob/master/lib/check/tcp-ip.js?
 - anti virus - avira - updates, scans.
+- general info - systeminfo, os, others?
 
 data sources
 - systeminformation
