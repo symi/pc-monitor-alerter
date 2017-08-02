@@ -7,6 +7,36 @@ const exec = promisify(require("child_process").exec);
 const xmlStringParser = promisify(new require("xml2js").Parser().parseString);
 const shell = require("node-powershell");
 const moment = require("moment");
+const wmi = require("node-wmi");
+const diskCheck = promisify(require("diskusage").check);
+const byteConverter = require("byte-converter").converterBase2;
+const os = require("os");
+
+
+//console.log(byteConverter(os.freemem(), "B", "GB"));
+
+// wmi.Query(
+//     {
+// namespace: "ROOT/OpenHardwareMonitor",
+// class: "Hardware"
+//     },
+//     function(err, res) {
+//         console.log(res);
+//     }
+// );
+// "Get-WmiObject -namespace ROOT\CIMV2\Applications\Avira_AntiVir -class Product_Info | Select-Object Last_Scan_Date,Last_Update_Date | ConvertTo-Json -Compress"
+
+async function space() {
+    const { available, free, total } = await diskCheck("c:"); //wmic logicaldisk get caption
+
+    console.log(
+        byteConverter(available, "B", "GB"),
+        byteConverter(free, "B", "GB"),
+        byteConverter(total, "B", "GB")
+    );
+}
+
+//space();
 
 async function dir() {
     let { stdout, stderr } = await exec("wevtutil gl System /f:XML");
@@ -47,4 +77,4 @@ async function dir() {
     }
 }
 
-dir();
+//dir();
