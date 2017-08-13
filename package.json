@@ -4,18 +4,29 @@
     "description": "Monitors PC temperatures, alerts if temps go over a threshold.",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "./node_modules/.bin/mocha test/**/*.js -w",
+        "coverage": "./node_modules/.bin/nyc --reporter=html --reporter=text --reporter=lcov ./node_modules/.bin/mocha test/**/*.js"
     },
     "keywords": ["temperature", "alerter", "cpu"],
     "author": "Si Levy",
     "license": "ISC",
     "dependencies": {
         "byte-converter": "^0.1.4",
+        "caller": "^1.0.1",
+        "diskusage": "^0.2.2",
+        "fs-extra": "^4.0.1",
+        "glob": "^7.1.2",
         "moment": "^2.18.1",
         "node-powershell": "^3.1.1",
         "node-wmi": "0.0.4",
         "systeminformation": "^3.23.7",
-        "xml2js": "^0.4.17",
-        "diskusage": "^0.2.2"
+        "xml2js": "^0.4.17"
+    },
+    "devDependencies": {
+        "chai": "^4.1.1",
+        "mocha": "^3.5.0",
+        "mock-require": "^2.0.2",
+        "nyc": "^11.1.0",
+        "sinon": "^3.0.0"
     }
 }

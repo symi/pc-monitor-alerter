@@ -1,3 +1,13 @@
+const ConfigurationBuilder = require("./src/configurations/configuration-builder");
+const path = require("path");
+
+(async () => {
+    let builder = new ConfigurationBuilder(
+            path.resolve(__dirname, "./config/config.json")
+        ),
+        configuration = await builder.getConfiguration();
+})();
+
 //import config from "config/config";
 
 //const intervalId = window.setInterval()
@@ -12,18 +22,17 @@ const diskCheck = promisify(require("diskusage").check);
 const byteConverter = require("byte-converter").converterBase2;
 const os = require("os");
 
-
 //console.log(byteConverter(os.freemem(), "B", "GB"));
 
-// wmi.Query(
-//     {
-// namespace: "ROOT/OpenHardwareMonitor",
-// class: "Hardware"
-//     },
-//     function(err, res) {
-//         console.log(res);
-//     }
-// );
+wmi.Query(
+    {
+        namespace: "ROOT/OpenHardwareMonitor",
+        class: "Hardware"
+    },
+    function(err, res) {
+        console.log(res);
+    }
+);
 // "Get-WmiObject -namespace ROOT\CIMV2\Applications\Avira_AntiVir -class Product_Info | Select-Object Last_Scan_Date,Last_Update_Date | ConvertTo-Json -Compress"
 
 async function space() {
