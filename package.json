@@ -13,11 +13,13 @@
     "dependencies": {
         "byte-converter": "^0.1.4",
         "caller": "^1.0.1",
+        "cron-parser": "^2.4.1",
         "diskusage": "^0.2.2",
         "fs-extra": "^4.0.1",
         "glob": "^7.1.2",
         "moment": "^2.18.1",
         "node-powershell": "^3.1.1",
+        "node-schedule": "^1.2.4",
         "node-wmi": "0.0.4",
         "systeminformation": "^3.23.7",
         "xml2js": "^0.4.17"

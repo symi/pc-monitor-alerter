@@ -1,8 +1,5 @@
 {
-    "scheduler": {
-        "time": "15:30:01",
-        "interval": 2
-    },
+    "scheduler": "*/2 * * * * *",
     "sources": [
         "open-hw-mon-wmi",
         "sys-info",
@@ -16,17 +13,13 @@
             "item": "cpu",
             "measures": ["temporature", "utilisation", "speed"],
             "aggregates": ["min", "max", "avg", "delta"],
-            "scheduler": {
-                "time": "12:00:00"
-            }
+            "scheduler": "* * 12 * * *"
         },
         {
             "item": "gpu",
             "measures": ["temporature", "utilisation", "speed"],
             "aggregates": ["min", "max", "avg", "delta"],
-            "scheduler": {
-                "interval": 5
-            }
+            "scheduler": "*/5 * * * * *"
         },
         {
             "item": "gpu",
