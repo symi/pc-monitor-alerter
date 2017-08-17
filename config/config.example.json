@@ -32,7 +32,8 @@
             "item": "gpu-memory",
             "measures": "all",
             "aggregates": "all",
-            "instances": 1
+            "instances": 1,
+            "scheduler": ""
         },
         {
             "item": "ram",

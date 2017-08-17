@@ -26,11 +26,11 @@ class Configuration extends GetAndInstantiateMixin() {
         return this._runners;
     }
 
-    _getScheduler(config = {}, isDefault = false) {
+    _getScheduler(config, isDefault = false) {
         let scheduler;
 
-        if (config.time || config.interval || isDefault) {
-            scheduler = new Scheduler(config.time, config.interval);
+        if (config || isDefault) {
+            scheduler = new Scheduler(config);
         } else {
             scheduler = this.defaultScheduler;
         }

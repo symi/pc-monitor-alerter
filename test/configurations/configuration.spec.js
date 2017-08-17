@@ -13,8 +13,7 @@ function checkScheduler(scheduler) {
     let baseScheduler = new Scheduler();
 
     expect(scheduler).to.be.an.instanceOf(Scheduler);
-    expect(scheduler.interval).to.equal(baseScheduler.interval);
-    expect(scheduler.time.isSame(baseScheduler.time)).to.be.true;
+    expect(scheduler.recurrence).to.equal(baseScheduler.recurrence);
 }
 
 function testSourceList(actualSources, expectedSources) {
@@ -25,14 +24,6 @@ function testSourceList(actualSources, expectedSources) {
             actualSources[index].spy.calledWithMatch(new RegExp(sourceString))
         ).to.be.true;
     });
-}
-
-function testScheduler(actualScheduler, expectedInterval, expectedTime) {
-    expect(actualScheduler.interval).to.equal(expectedInterval);
-    expect(
-        actualScheduler.time.isSame(expectedTime, "seconds"),
-        `expect ${actualScheduler.time.toISOString()} to be the same time as ${expectedTime.toISOString()}` // limiting granularity to 1 sec as ms can be different.
-    ).to.be.true;
 }
 
 describe("Configuration, when created", () => {
@@ -65,15 +56,15 @@ describe("Configuration, when created", () => {
     });
 
     describe("the default scheduler", () => {
-        it("should create the base scheduler if default scheduler module is missing", function() {
+        it("should create the base scheduler if default scheduler is missing", function() {
             delete this.example.scheduler;
 
             let c = new Configuration(this.example);
             checkScheduler(c.defaultScheduler);
         });
 
-        it("should create the base scheduler if default scheduler module has no time and interval", function() {
-            this.example.scheduler = {};
+        it("should create the base scheduler if default scheduler has no rule", function() {
+            this.example.scheduler = "";
 
             let c = new Configuration(this.example);
             checkScheduler(c.defaultScheduler);
@@ -82,16 +73,7 @@ describe("Configuration, when created", () => {
         it("should create a default scheduler from the config when present", function() {
             let c = new Configuration(this.example);
 
-            expect(c.defaultScheduler.interval).to.equal(2);
-            expect(
-                c.defaultScheduler.time.isSame(
-                    moment({
-                        hours: 15,
-                        minutes: 30,
-                        seconds: 1
-                    })
-                )
-            ).to.be.true;
+            expect(c.defaultScheduler.recurrence).to.equal("*/2 * * * * *");
         });
     });
 
@@ -211,24 +193,22 @@ describe("Configuration, when created", () => {
         });
 
         describe("and the scheduler calculated", () => {
-            it("to the default scheduler if not watcher scheduler is present", function() {
+            it("to the default scheduler if no watcher scheduler is present", function() {
                 let c = new Configuration(this.example);
-                testScheduler(
-                    c.runners[3].scheduler,
-                    2,
-                    moment({ hours: 15, minutes: 30, seconds: 1 })
+                expect(c.runners[3].scheduler.recurrence).to.equal(
+                    "*/2 * * * * *"
+                );
+                expect(c.runners[4].scheduler.recurrence).to.equal(
+                    "*/2 * * * * *"
                 );
             });
 
             it("to the watcher scheduler if present regardless of default scheduler", function() {
                 // check only time, only interval in watcher scheduler with/without default
                 let c = new Configuration(this.example);
-                testScheduler(
-                    c.runners[0].scheduler,
-                    86400,
-                    moment({ hours: 12, minutes: 0, seconds: 0 })
+                expect(c.runners[0].scheduler.recurrence).to.equal(
+                    "* * 12 * * *"
                 );
-                testScheduler(c.runners[1].scheduler, 5, moment());
             });
         });
     });

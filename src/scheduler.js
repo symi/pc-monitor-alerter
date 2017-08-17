@@ -1,45 +1,34 @@
-const moment = require("moment");
+const moment = require("moment"),
+    schedule = require("node-schedule"),
+    cronParser = require("cron-parser"),
+    EventEmitter = require("events");
 
-class Scheduler {
-    constructor(time, interval) {
-        if (!time && !interval) {
+class Scheduler extends EventEmitter {
+    constructor(recurrenceStatement) {
+        super();
+
+        if (recurrenceStatement) {
+            try {
+                cronParser.parseExpression(recurrenceStatement);
+            } catch (err) {
+                throw new Error(`Invalid recurrence rule for scheduler: "${recurrenceStatement}".
+Parse Error: "${err.message}".`);
+            }
+        } else {
             return Scheduler.getBaseScheduler();
         }
 
-        this._time = Scheduler._getTime(time);
-        this._interval = interval || 86400; /* 1 day in seconds */
+        this._recurrence = recurrenceStatement;
     }
 
-    get time() {
-        return this._time;
+    get recurrence() {
+        return this._recurrence;
     }
 
-    get interval() {
-        return this._interval;
-    }
+    
 
     static getBaseScheduler() {
-        return new Scheduler(
-            moment({
-                hours: 0,
-                minutes: 0,
-                seconds: 0
-            }),
-            60
-        );
-    }
-
-    static _getTime(time) {
-        if (!time) return moment();
-
-        if (time instanceof moment) return time;
-
-        const [hours, minutes, seconds] = time.split(":");
-        return moment({
-            hours,
-            minutes,
-            seconds
-        });
+        return new Scheduler("* */10 * * * *");
     }
 }
 
