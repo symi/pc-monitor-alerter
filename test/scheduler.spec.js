@@ -8,7 +8,7 @@ describe("Scheduler", () => {
     beforeEach(function() {
         let schedule = require("node-schedule");
         this.stubs = {};
-        
+
         this.stubs.cancel = this.sandbox.spy();
 
         this.stubs.nextInvocation = this.sandbox.stub();
@@ -79,7 +79,8 @@ describe("Scheduler", () => {
             let scheduler = new Scheduler();
             scheduler.start();
 
-            expect(this.stubs.scheduleJob.calledWith(scheduler.recurrence)).to.be.true;
+            expect(this.stubs.scheduleJob.calledWith(scheduler.recurrence)).to
+                .be.true;
         });
 
         it("and then stopped, the started job should be cancelled", function() {
@@ -103,10 +104,23 @@ describe("Scheduler", () => {
             // our fake date setup in beforeEach.
             expect(scheduler.nextRun.isSame(moment(new Date(2017, 0, 1)))).to.be
                 .true;
-
+            
             scheduler.stop();
 
             expect(scheduler.nextRun).to.equal(undefined);
+        });
+
+        it("and then start requested again, should not remake the schedule job", function() {
+            let scheduler = new Scheduler(),
+                spy = this.sandbox.spy();
+            scheduler.on("run", spy);
+            scheduler.start();
+
+            expect(() => {
+                scheduler.start();
+            }).not.to.throw();
+
+            expect(spy.callCount).to.equal(2);
         });
     });
 });

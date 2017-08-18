@@ -32,8 +32,14 @@ Parse Error: "${err.message}".`);
     }
 
     start() {
-        this._invoke(); // kick off an initial invokation, then schedule future.
-        this._job = schedule.scheduleJob(this._recurrence, this._invoke.bind(this));
+        // dont start a new job if already running.
+        if (!this._job) {
+            this._invoke(); // kick off an initial invokation, then schedule future.
+            this._job = schedule.scheduleJob(
+                this._recurrence,
+                this._invoke.bind(this)
+            );
+        }
     }
 
     stop() {
