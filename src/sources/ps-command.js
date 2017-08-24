@@ -1,9 +1,12 @@
 const shell = require("node-powershell");
+const Source = require("./source");
 
 const toJsonCommand = " | ConvertTo-Json -Compress";
 
-export default class PSCommand {
-    constructor(config={}) {
+class PSCommand extends Source {
+    constructor(sourceName = "ps-command", config = {}) {
+        super(sourceName);
+
         this._configuration = {
             debugMsg: false
         };
@@ -11,12 +14,13 @@ export default class PSCommand {
         Object.assign(this._configuration, config);
     }
 
-    async exec(commandString, toJson=true) {
+    // TODO: weigh up overhead of creating shell for every exec vs keep 1 alive.
+    async exec(commandString, toJson = true) {
         let ps, data;
 
         try {
-            ps = new shell(this._configuration);            
-            ps.addCommand(`${commandString}${toJson ? toJsonCommand : ''}`);
+            ps = new shell(this._configuration);
+            ps.addCommand(`${commandString}${toJson ? toJsonCommand : ""}`);
             data = await ps.invoke();
         } finally {
             ps.dispose();
@@ -28,4 +32,21 @@ export default class PSCommand {
 
         return data;
     }
+
+    async available() {
+        let ps,
+            shellPresent = true;
+
+        try {
+            ps = new shell(this._configuration);
+        } catch (err) {
+            shellPresent = false;
+        } finally {
+            ps.dispose();
+        }
+
+        return shellPresent;
+    }
 }
+
+module.exports = PSCommand;

@@ -2,9 +2,13 @@ const { promisify } = require("util");
 const wmiQuery = promisify(require("node-wmi").Query);
 const PSCommand = require("./ps-command");
 
-export default class WMIQuery extends PSCommand {
-    constructor(namespace, className) {
-        this._PSCommand = "Get-WmiObject";
+const wmiSourceName = "wmi-query";
+const PSCommandName = "Get-WmiObject";
+
+class WMIQuery extends PSCommand {
+    constructor(sourceName = wmiSourceName, namespace, className) {
+        super(sourceName, {});
+
         this._namespace = this._validateNamespace(namespace);
         this.className = className;
     }
@@ -42,7 +46,7 @@ export default class WMIQuery extends PSCommand {
     }
 
     async _execNodeWMI(fields) {
-        let query = { namespace: this.namespace, class: this.className};
+        let query = { namespace: this.namespace, class: this.className };
 
         if (fields.length) {
             query.properties = fields;
@@ -63,7 +67,7 @@ export default class WMIQuery extends PSCommand {
 
     async exec(commandString, toJson = true) {
         return await super.exec(
-            `${this._PSCommand} -namespace ${this.namespace} -class ${this
+            `${PSCommandName} -namespace ${this.namespace} -class ${this
                 .className} ${commandString}`,
             toJson
         );
@@ -80,4 +84,12 @@ export default class WMIQuery extends PSCommand {
 
         return data;
     }
+
+    // for now assume wmi is present if ps is present.
+    // TODO: proper check here.
+    async available() {
+        return await super.available();
+    }
 }
+
+module.exports = WMIQuery;
