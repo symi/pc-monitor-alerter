@@ -41,7 +41,7 @@ class Configuration extends GetAndInstantiateMixin() {
     _getSources(config = [], isDefault = false) {
         let sources;
 
-        config = Array.from(config);
+        if (!Array.isArray(config)) config = [config];
 
         if (!isDefault && !config.length) {
             // skip check for default since config and default source can be empty during generation.
