@@ -1,4 +1,4 @@
-const Item = require("../item");
+const Item = require("./item");
 
 class SysLog extends Item {
     constructor() {

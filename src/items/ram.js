@@ -1,4 +1,4 @@
-const Item = require("../item");
+const Item = require("./item");
 
 class RAM extends Item {
     constructor() {
