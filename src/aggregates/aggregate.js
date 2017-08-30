@@ -1,13 +1,8 @@
-const caller = require("caller"),
-    { basename } = require("path");
+const ConfigEntity = require("../config-entity");
 
-class Aggregate {
+class Aggregate extends ConfigEntity {
     constructor() {
-        this._name = basename(caller(), ".js") || "UNKNOWN Aggregate";
-    }
-
-    get name() {
-        return this._name;
+        super();
     }
 }
 

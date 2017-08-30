@@ -1,23 +1,18 @@
-const caller = require("caller"),
-    { basename } = require("path");
+const ConfigEntity = require("../config-entity");
 
-class Measure {
-    constructor(value, unit) {
-        this._name = basename(caller(), ".js") || "UNKNOWN measure";
-        this._value = value;
-        this._unit = unit;
+class Measure extends ConfigEntity {
+    constructor(unitString) {
+        super();
+        this._records = [];
+        this._unit = unitString;
     }
 
-    get name() {
-        return this._name;
+    get records() {
+        return this._records;
     }
 
-    get value() {
-        return this._value;
-    }
-
-    set value(value) {
-        this._value = value;
+    set records(records) {
+        this._records = records;
     }
 
     get unit() {
