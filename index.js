@@ -6,8 +6,11 @@ const path = require("path");
             path.resolve(__dirname, "./config/config.json")
         ),
         configuration = await builder.getConfiguration();
-})();
 
+        configuration.runners.forEach(runner => runner.start());
+
+})();
+/*
 //import config from "config/config";
 
 //const intervalId = window.setInterval()
@@ -87,3 +90,4 @@ async function dir() {
 }
 
 //dir();
+*/

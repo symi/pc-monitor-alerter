@@ -1,75 +1,13 @@
 {
-    "scheduler": {
-        "time": "00:00:00",
-        "interval": 60
-    },
+    "scheduler": "*/2 * * * * *",
     "sources": [
-        "open-hw-mon-wmi",
-        "sys-info",
-        "os",
-        "avira-wmi",
-        "diskusage",
-        "win-event"
+        "open-hw-mon-wmi"
     ],
     "hwWatchers": [
         {
             "item": "cpu",
             "measures": ["temporature", "utilisation", "speed"],
-            "aggregates": ["min", "max", "avg", "delta"],
-            "scheduler": {
-                "time": "12:00:00"
-            }
-        },
-        {
-            "item": "gpu",
-            "measures": ["temporature", "utilisation", "speed"],
-            "aggregates": ["min", "max", "avg", "delta"],
-            "scheduler": {
-                "interval": 5
-            }
-        },
-        {
-            "item": "gpu",
-            "measures": "temporature",
-            "aggregates": "avg",
-            "instances": [1, 2],
-            "sources": ["sys-info", "open-hw-mon-wmi"]
-        },
-        {
-            "item": "gpu-memory",
-            "measures": "all",
-            "aggregates": "all",
-            "instances": 1
-        },
-        {
-            "item": "ram",
-            "measures": ["temporature", "utilisation", "speed"],
             "aggregates": ["min", "max", "avg", "delta"]
-        },
-        {
-            "item": "disk",
-            "measures": ["temporature", "utilisation", "speed"],
-            "aggregates": ["min", "max", "avg", "delta"],
-            "instances": "C",
-            "sources": "diskusage"
-        }
-    ],
-    "swWatchers": [
-        {
-            "item": "sys-log",
-            "measures": ["Critical", "Error"],
-            "aggregates": ["count", "delta", "detail"]
-        },
-        {
-            "item": "sys-up-time"
-        },
-        {
-            "item": "antivirus-avira",
-            "measures": ["updates", "scans"],
-            "aggregates": ["count", "delta", "detail", "last"]
-        },
-        {
-            "item": "sys-info"
         }
     ]
 }

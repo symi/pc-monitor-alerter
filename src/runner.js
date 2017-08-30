@@ -1,0 +1,48 @@
+class Runner {
+    constructor(watcher, sources, scheduler) {
+        this._watcher = watcher;
+        this._sources = sources;
+        this._scheduler = scheduler;
+    }
+
+    get watcher() {
+        return this._watcher;
+    }
+
+    get sources() {
+        return this._sources;
+    }
+
+    get scheduler() {
+        return this._scheduler;
+    }
+
+    async execute() {
+        // see which sources are current available and only pass them to the watcher.
+        // again we dont care getData is async.
+        this.watcher.getData(await Runner._getAvailableSources(this.sources));
+    }
+
+    start() {
+        // register our run handler, even tho its an async handler it doesnt matter.
+        this.scheduler.on("run", this.execute.bind(this));
+        this.scheduler.start();
+    }
+
+    stop() {
+        this.scheduler.stop();
+    }
+
+    static async _getAvailableSources(sources) {
+        // kick off the available calls in parallel, but keep overall source ordering.
+        sources = await Promise.all(
+            sources.map(async source => {
+                return (await source.available()) ? source : undefined;
+            })
+        );
+
+        return sources.filter(source => source !== undefined);
+    }
+}
+
+module.exports = Runner;

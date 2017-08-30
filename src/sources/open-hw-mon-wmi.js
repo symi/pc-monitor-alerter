@@ -59,16 +59,16 @@ class OpenHWMonWMI extends WMIQuery {
                 );
                 break;
             case "ram":
-                let gpuHwInstances = hwInstances.filter(
+                let ramHwInstances = hwInstances.filter(
                     hwInstance => hwInstance.HardwareType === "RAM"
                 );
 
                 // can only return 1 ram instance
-                if (gpuHwInstances) {
+                if (ramHwInstances) {
                     itemConfigurations = [
                         new ItemConfiguration(
                             itemName,
-                            gpuHwInstances[0].Identifier
+                            ramHwInstances[0].Identifier
                         )
                     ];
                 }
