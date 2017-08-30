@@ -13,7 +13,7 @@ class WatcherFactory extends GetAndInstantiateMixin() {
     static createHwWatcher(item, measures, aggregates, instances) {
         return new HwWatcher(
             ...WatcherFactory._getBaseArgs(
-                `hw-items/${item}`,
+                item,
                 HwWatcher.defaultMeasures(measures),
                 HwWatcher.defaultAggregates(aggregates)
             ),
@@ -24,7 +24,7 @@ class WatcherFactory extends GetAndInstantiateMixin() {
     static createSwWatcher(item, measures, aggregates) {
         return new SwWatcher(
             ...WatcherFactory._getBaseArgs(
-                `sw-items/${item}`,
+                item,
                 measures,
                 SwWatcher.defaultAggregates(aggregates)
             )
@@ -33,10 +33,8 @@ class WatcherFactory extends GetAndInstantiateMixin() {
 
     static _getBaseArgs(item, measures = [], aggregates = []) {
         return [
-            WatcherFactory._getAndInstantiate(`../items/${item}`),
-            measures.map(measure =>
-                WatcherFactory._getAndInstantiate(`../measures/${measure}`)
-            ),
+            item,
+            measures,
             aggregates.map(aggregate =>
                 WatcherFactory._getAndInstantiate(`../aggregates/${aggregate}`)
             )

@@ -112,11 +112,9 @@ describe("Configuration, when created", () => {
             expect(c.runners).to.have.lengthOf(hwWatchers.length);
 
             hwWatchers.forEach((watcherString, index) => {
-                expect(
-                    c.runners[index].watcher.item.spy.calledWithMatch(
-                        new RegExp(watcherString)
-                    )
-                ).to.be.true;
+                expect(c.runners[index].watcher.itemName).to.equal(
+                    watcherString
+                );
             });
         });
 
@@ -134,11 +132,7 @@ describe("Configuration, when created", () => {
             expect(c.runners).to.have.lengthOf(swWatchers.length);
 
             swWatchers.forEach((watcherString, index) => {
-                expect(
-                    c.runners[index].watcher.item.spy.calledWithMatch(
-                        new RegExp(watcherString)
-                    )
-                ).to.be.true;
+                expect(c.runners[index].watcher.itemName).to.equal(watcherString);
             });
         });
 

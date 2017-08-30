@@ -1,22 +1,29 @@
-let WatcherFactory = require("../../src/watchers/watcher-factory");
-const { expect } = require("chai"),
+let WatcherFactory = require("../../src/watchers/watcher-factory"),
     Watcher = require("../../src/watchers/watcher"),
     HwWatcher = require("../../src/watchers/hw-watcher"),
-    SwWatcher = require("../../src/watchers/sw-watcher"),
+    SwWatcher = require("../../src/watchers/sw-watcher");
+
+const { expect } = require("chai"),
     { setMock, removeMock } = require("../mocks-helpers/GetAndInstantiateMock");
 
 describe("WatcherFactory", () => {
     beforeEach(function() {
         this.spys = [];
-        WatcherFactory = setMock((...args) => {
-            let spy = this.sandbox.spy();
-            this.spys.push(spy);
-            spy(...args);
+        [Watcher, HwWatcher, SwWatcher, WatcherFactory] = setMock(
+            (...args) => {
+                let spy = this.sandbox.spy();
+                this.spys.push(spy);
+                spy(...args);
 
-            return {
-                spy
-            };
-        }, require.resolve("../../src/watchers/watcher-factory"))[0];
+                return {
+                    spy
+                };
+            },
+            require.resolve("../../src/watchers/watcher"),
+            require.resolve("../../src/watchers/hw-watcher"),
+            require.resolve("../../src/watchers/sw-watcher"),
+            require.resolve("../../src/watchers/watcher-factory")
+        );
     });
 
     afterEach(() => {
@@ -26,12 +33,14 @@ describe("WatcherFactory", () => {
 
     function checkBase(watcher, item, measures, ags) {
         expect(watcher).to.be.an.instanceOf(Watcher);
-        expect(watcher.item.spy.calledWithMatch(new RegExp(item))).to.be.true;
-        measures.forEach((measure, index) => {
-            expect(
-                watcher.measures[index].spy.calledWithMatch(new RegExp(measure))
-            ).to.be.true;
-        });
+        expect(watcher.itemName).to.equal(item);
+
+        // set dummy item instance to check measures set.
+        watcher.items = [{ name: "test", identifier: "test" }];
+        expect(watcher.items[0].spy.getCall(0).args[1]).to.have.members(
+            measures
+        );
+
         ags.forEach((ag, index) => {
             expect(
                 watcher.aggregates[index].spy.calledWithMatch(new RegExp(ag))
