@@ -2,9 +2,9 @@ const ConfigEntity = require("../config-entity"),
     { GetAndInstantiateMixin } = require("../mixins");
 
 class Item extends GetAndInstantiateMixin(ConfigEntity) {
-    constructor(name, measures, identifier) {
+    constructor(identifier, measureConfiguration, name) {
         super(name);
-        this._measures = Item._getMeasures(measures);
+        this._measures = Item._getMeasures(measureConfiguration);
         this._identifier = identifier;
     }
 
@@ -16,15 +16,28 @@ class Item extends GetAndInstantiateMixin(ConfigEntity) {
         return this._identifier;
     }
 
-    static _getMeasures(measures = []) {
-        return measures.map(measure =>
-            Item._getAndInstantiate(`../measures/${measure}`)
+    static _getMeasures(measureConfiguration) {
+        return measureConfiguration.measureNames.map(measure =>
+            Item._getAndInstantiate(
+                `../measures/${measure}`,
+                measureConfiguration.historyCount,
+                measureConfiguration.aggregates
+            )
         );
     }
 
+    /**
+     * 
+     * @return {boolean} Whether all the item's measures' records are populated with values.
+     * @readonly
+     * @memberof Item
+     */
     get populated() {
-        // TODO use measures..records
-        return this._measures.every(measure => measure.value !== undefined);
+        return this.measures.every(
+            measure =>
+                measure.records &&
+                measure.records.every(record => record.value != null)
+        );
     }
 }
 

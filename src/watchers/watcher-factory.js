@@ -1,42 +1,56 @@
-const { GetAndInstantiateMixin } = require("../mixins"),
-    Watcher = require("./watcher"),
+const Watcher = require("./watcher"),
     HwWatcher = require("./hw-watcher"),
-    SwWatcher = require("./sw-watcher");
+    SwWatcher = require("./sw-watcher"),
+    MeasureConfiguration = require("../measures/measure-configuration");
 
-class WatcherFactory extends GetAndInstantiateMixin() {
-    static createWatcher(item, measures, aggregates) {
+class WatcherFactory {
+    static createWatcher(item, measures, historyCount, aggregates) {
         return new Watcher(
-            ...WatcherFactory._getBaseArgs(item, measures, aggregates)
+            ...WatcherFactory._getBaseArgs(
+                item,
+                measures,
+                historyCount,
+                aggregates
+            )
         );
     }
 
-    static createHwWatcher(item, measures, aggregates, instances) {
+    static createHwWatcher(
+        item,
+        measures,
+        historyCount,
+        aggregates,
+        instances
+    ) {
         return new HwWatcher(
             ...WatcherFactory._getBaseArgs(
                 item,
                 HwWatcher.defaultMeasures(measures),
+                historyCount,
                 HwWatcher.defaultAggregates(aggregates)
             ),
             HwWatcher.defaultInstances(instances)
         );
     }
 
-    static createSwWatcher(item, measures, aggregates) {
+    static createSwWatcher(item, measures, historyCount, aggregates) {
         return new SwWatcher(
             ...WatcherFactory._getBaseArgs(
                 item,
                 measures,
+                historyCount,
                 SwWatcher.defaultAggregates(aggregates)
             )
         );
     }
 
-    static _getBaseArgs(item, measures = [], aggregates = []) {
+    static _getBaseArgs(item, measures, historyCount, aggregates) {
         return [
             item,
-            measures,
-            aggregates.map(aggregate =>
-                WatcherFactory._getAndInstantiate(`../aggregates/${aggregate}`)
+            new MeasureConfiguration(
+                measures,
+                historyCount,
+                aggregates
             )
         ];
     }

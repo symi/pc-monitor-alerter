@@ -1,12 +1,8 @@
 const Watcher = require("./watcher");
 
 class SwWatcher extends Watcher {
-    constructor(item, measures, aggregates) {
-        super(
-            item,
-            measures, // no defaults for sw measures
-            aggregates
-        );
+    constructor(item, measureConfiguration) {
+        super(item, measureConfiguration);
     }
 
     static defaultAggregates(aggregates = []) {

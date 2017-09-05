@@ -1,8 +1,8 @@
 const Watcher = require("./watcher");
 
 class HwWatcher extends Watcher {
-    constructor(itemName, measures, aggregates, instances = ["all"]) {
-        super(itemName, measures, aggregates);
+    constructor(itemName, measureConfiguration, instances = ["all"]) {
+        super(itemName, measureConfiguration);
         this._instances = instances;
     }
 

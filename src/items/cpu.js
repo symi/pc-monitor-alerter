@@ -1,8 +1,8 @@
 const Item = require("./item");
 
 class CPU extends Item {
-    constructor(measures, identifier) {
-        super("cpu", measures, identifier);
+    constructor(identifier, measureConfiguration) {
+        super(identifier, measureConfiguration, "cpu");
     }
 }
 

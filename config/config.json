@@ -3,11 +3,12 @@
     "sources": [
         "open-hw-mon-wmi"
     ],
+    "historyCount": 3,
     "hwWatchers": [
         {
             "item": "cpu",
-            "measures": ["temporature", "utilisation", "speed"],
-            "aggregates": ["min", "max", "avg", "delta"]
+            "measures": ["temporature"],
+            "aggregates": ["min"]
         }
     ]
 }

@@ -12,6 +12,8 @@ class Configuration extends GetAndInstantiateMixin() {
         this._runners = this._getHwRunners(config.hwWatchers).concat(
             this._getSwRunners(config.swWatchers)
         );
+
+        this._defaultHistoryCount = config.historyCount;
     }
 
     get defaultScheduler() {
@@ -75,11 +77,27 @@ class Configuration extends GetAndInstantiateMixin() {
         return sources;
     }
 
+    /**
+     * Gets the history count property for each watcher. If no historyCount prop is present
+     * on the watcher config node, then the default historyCount prop is used.
+     * 
+     * @private
+     * @param {number} count The count of the watcher node.
+     * @returns {number} The resolved count.
+     * @memberof Configuration
+     */
+    _getHistoryCount(count) {
+        if (count != null) return count;
+
+        return this._defaultHistoryCount;
+    }
+
     _getHwRunners(config = []) {
         return Array.from(config).map(watcherConfig => {
             let watcher = WatcherFactory.createHwWatcher(
                     watcherConfig.item,
                     watcherConfig.measures,
+                    this._getHistoryCount(watcherConfig.historyCount),
                     watcherConfig.aggregates,
                     watcherConfig.instances
                 ),
@@ -95,6 +113,7 @@ class Configuration extends GetAndInstantiateMixin() {
             let watcher = WatcherFactory.createSwWatcher(
                     watcherConfig.item,
                     watcherConfig.measures,
+                    this._getHistoryCount(watcherConfig.historyCount),
                     watcherConfig.aggregates
                 ),
                 sources = this._getSources(watcherConfig.sources),

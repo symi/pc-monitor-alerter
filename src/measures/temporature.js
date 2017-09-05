@@ -1,8 +1,8 @@
 const Measure = require("./measure");
 
 class Temporature extends Measure {
-    constructor() {
-        super("°C");
+    constructor(historyCount, aggregates) {
+        super(historyCount, aggregates, "°C", "temporature");
     }
 }
 
