@@ -2,13 +2,17 @@ const ConfigurationBuilder = require("./src/configurations/configuration-builder
 const path = require("path");
 
 (async () => {
+    try {
     let builder = new ConfigurationBuilder(
             path.resolve(__dirname, "./config/config.json")
         ),
         configuration = await builder.getConfiguration();
 
-        configuration.runners.forEach(runner => runner.start());
 
+        configuration.runners.forEach(runner => runner.start());
+    } catch (err) {
+        console.error(err);
+    }
 })();
 /*
 //import config from "config/config";

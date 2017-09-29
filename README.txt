@@ -23,7 +23,7 @@ data aggregation
 notification
 - limits
 - general reports schedules
-- mediums - sms, email
+- mediums - sms (https://github.com/mediaburst/node-clockwork), email
 
 - web portal (push notifications)
 - web api
