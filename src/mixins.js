@@ -12,6 +12,8 @@ exports.GetAndInstantiateMixin = (Base = DefaultBase) =>
             try {
                 ob = new (require(resolvedPath))(...ctorArgs);
             } catch (e) {
+                if (e.message.indexOf("Cannot find module") === -1)
+                    console.warn(e);
                 //throw new Error(`Missing Class for path "${path}".`);
             }
 

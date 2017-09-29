@@ -31,7 +31,7 @@ describe("WatcherFactory", () => {
         delete this.spys;
     });
 
-    function checkBase(watcher, item, measures, ags) {
+    function checkBase(watcher, item, measures, ags, watcherCount) {
         expect(watcher).to.be.an.instanceOf(Watcher);
         expect(watcher.itemName).to.equal(item);
 
@@ -46,16 +46,25 @@ describe("WatcherFactory", () => {
                 watcher.aggregates[index].spy.calledWithMatch(new RegExp(ag))
             ).to.be.true;
         });
+
+        expect(watcher.items[0].spy.getCall(0).args[3]).to.equal(watcherCount);
     }
 
     it("should create the base Watcher from identifiers", () => {
         let watcher = WatcherFactory.createWatcher(
             "item1",
             ["measure1", "measure2"],
-            ["ag1", "ag2"]
+            ["ag1", "ag2"],
+            3
         );
 
-        checkBase(watcher, "item1", ["measure1", "measure2"], ["ag1", "ag2"]);
+        checkBase(
+            watcher,
+            "item1",
+            ["measure1", "measure2"],
+            ["ag1", "ag2"],
+            3
+        );
     });
 
     it("should create a hw watcher from identifiers", () => {
@@ -63,11 +72,18 @@ describe("WatcherFactory", () => {
             "item1",
             ["measure1", "measure2"],
             ["ag1", "ag2"],
+            3,
             [1]
         );
 
         expect(watcher).to.be.an.instanceOf(HwWatcher);
-        checkBase(watcher, "item1", ["measure1", "measure2"], ["ag1", "ag2"]);
+        checkBase(
+            watcher,
+            "item1",
+            ["measure1", "measure2"],
+            ["ag1", "ag2"],
+            3
+        );
         expect(watcher.instances[0]).to.equal(1);
     });
 
@@ -75,10 +91,17 @@ describe("WatcherFactory", () => {
         let watcher = WatcherFactory.createSwWatcher(
             "item1",
             ["measure1", "measure2"],
-            ["ag1", "ag2"]
+            ["ag1", "ag2"],
+            3
         );
 
         expect(watcher).to.be.an.instanceOf(SwWatcher);
-        checkBase(watcher, "item1", ["measure1", "measure2"], ["ag1", "ag2"]);
+        checkBase(
+            watcher,
+            "item1",
+            ["measure1", "measure2"],
+            ["ag1", "ag2"],
+            3
+        );
     });
 });

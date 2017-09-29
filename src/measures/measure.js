@@ -11,6 +11,7 @@ class Measure extends GetAndInstantiateMixin(ConfigEntity) {
         this._aggregates = aggregates;
     }
 
+    // TODO: record sets should be iterables returned.
     get records() {
         return this._allRecords[0]; // latest records is the first index.
     }

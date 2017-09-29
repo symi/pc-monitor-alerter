@@ -109,7 +109,7 @@ class OpenHWMonWMI extends WMIQuery {
         await Promise.all(
             item.measures.map(async measure => {
                 switch (measure.name) {
-                    case "temporature":
+                    case "temperature":
                         measure.records = this._dataForMeasure(
                             "Temperature",
                             data
@@ -134,6 +134,7 @@ class OpenHWMonWMI extends WMIQuery {
             .map(record => new Record(record.Name, record.Value));
     }
 
+    // TODO: add named instances.
     _processItemInstances(itemName, instances, hwInstances) {
         let itemConfigurations;
 
@@ -150,7 +151,7 @@ class OpenHWMonWMI extends WMIQuery {
                 .filter(hwInstance =>
                     instances.some(
                         instance =>
-                            hwInstance.Identifier.substr(-1) === instance
+                            hwInstance.Identifier.substr(-1) === (instance - 1) // instance 0 is configured as instance 1 in the config file
                     )
                 )
                 .map(

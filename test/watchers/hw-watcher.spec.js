@@ -8,13 +8,13 @@ describe("HwWatcher", () => {
     it("when instantiated with an item, measures, aggregates and instances array, should return them via its api", () => {
         const instances = [1, 2, 3];
 
-        let watcher = new HwWatcher(new Item(), [], [], instances);
+        let watcher = new HwWatcher(new Item(), [], [], undefined, instances);
 
         expect(watcher.instances).to.have.members(instances);
     });
 
     it("when instantiated with no instances should return an all instance via its api", () => {
-        let watcher = new HwWatcher(new Item(), [], [], undefined);
+        let watcher = new HwWatcher(new Item(), [], [], undefined, undefined);
 
         expect(watcher.instances).to.have.members(["all"]);
     });
