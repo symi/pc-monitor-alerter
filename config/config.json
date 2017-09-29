@@ -7,8 +7,12 @@
     "hwWatchers": [
         {
             "item": "cpu",
-            "measures": ["temporature"],
-            "aggregates": ["min"]
+            "measures": ["temperature"],
+            "aggregates": ["min"],
+            "reporters": [{
+                "name": "console-basic",
+                "rule": "temperature of any sensor > 0"
+            }]
         }
     ]
 }

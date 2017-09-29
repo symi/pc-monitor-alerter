@@ -1,8 +1,12 @@
 class Runner {
-    constructor(watcher, sources, scheduler) {
+    constructor(watcher, sources, scheduler, reporterConfigurations) {
         this._watcher = watcher;
         this._sources = sources;
         this._scheduler = scheduler;
+        this._reporterConfigurations = reporterConfigurations;
+
+        // register our run handler, even tho its an async handler it doesnt matter.
+        this.scheduler.on("run", this.execute.bind(this));
     }
 
     get watcher() {
@@ -17,15 +21,28 @@ class Runner {
         return this._scheduler;
     }
 
+    get reporterConfigurations() {
+        return this._reporterConfigurations;
+    }
+
     async execute() {
-        // see which sources are current available and only pass them to the watcher.
-        // again we dont care getData is async.
-        this.watcher.getData(await Runner._getAvailableSources(this.sources));
+        try {
+            // see which sources are current available and only pass them to the watcher.
+            // again we dont care getData is async. TODO: are we sure we dont care???
+            await /* <-- remove */ this.watcher.getData(
+                await Runner._getAvailableSources(this.sources)
+            );
+
+            this.reporterConfigurations.forEach(reporterConfiguration => {
+                if (reporterConfiguration.rule.test(this.watcher))
+                    reporterConfiguration.reporter.report(this.watcher); // this is probably async
+            });
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     start() {
-        // register our run handler, even tho its an async handler it doesnt matter.
-        this.scheduler.on("run", this.execute.bind(this));
         this.scheduler.start();
     }
 

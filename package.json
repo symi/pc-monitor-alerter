@@ -5,19 +5,27 @@
     "main": "index.js",
     "scripts": {
         "test": "./node_modules/.bin/mocha test/**/*.js -w",
-        "coverage": "./node_modules/.bin/nyc --reporter=html --reporter=text --reporter=lcov ./node_modules/.bin/mocha test/**/*.js"
+        "coverage": "./node_modules/.bin/nyc --reporter=html --reporter=text --reporter=lcov ./node_modules/.bin/mocha test/**/*.js",
+        "test-parse": "node_modules/.bin/nearleyc ./src/rules/grammar.ne -o ./src/rules/grammar.js && node --inspect-brk ./src/rules/test.js"
     },
-    "keywords": ["temperature", "alerter", "cpu"],
+    "keywords": [
+        "temperature",
+        "alerter",
+        "cpu"
+    ],
     "author": "Si Levy",
     "license": "ISC",
     "dependencies": {
         "byte-converter": "^0.1.4",
         "caller": "^1.0.1",
+        "chalk": "^2.1.0",
         "cron-parser": "^2.4.1",
         "diskusage": "^0.2.2",
         "fs-extra": "^4.0.1",
         "glob": "^7.1.2",
         "moment": "^2.18.1",
+        "moo": "^0.4.2",
+        "nearley": "^2.11.0",
         "node-powershell": "^3.1.1",
         "node-schedule": "^1.2.4",
         "node-wmi": "0.0.4",
