@@ -18,7 +18,7 @@ data sources
 - second service required to monitor up time?
 
 data aggregation
-- min, max, avg, total, delta (change)
+- min, max, mean, sum, delta (change)
 
 notification
 - limits
