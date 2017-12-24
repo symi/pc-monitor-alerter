@@ -26,6 +26,10 @@ class Configuration extends GetAndInstantiateMixin() {
         return this._defaultSources;
     }
 
+    get defaultReporters() {
+        return this._defaultReporters;
+    }
+
     get runners() {
         return this._runners;
     }

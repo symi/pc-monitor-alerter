@@ -2,18 +2,30 @@
     "scheduler": "*/2 * * * * *",
     "sources": [
         "open-hw-mon-wmi",
-        "sys-info",
+        "systeminformation",
         "os",
         "avira-wmi",
         "diskusage",
         "win-event"
     ],
+    "reporters": [{
+        "name": "console-basic",
+        "rule": "temperature of any sensor > 0"
+    }, {
+        "name": "api"
+    }],
     "hwWatchers": [
         {
             "item": "cpu",
             "measures": ["temporature", "utilisation", "speed"],
             "aggregates": ["min", "max", "avg", "delta"],
-            "scheduler": "* * 12 * * *"
+            "scheduler": "* * 12 * * *",
+            "reporters": [{
+                "name": "console-basic",
+                "rule": "utilisation of all sensors = 50"
+            }, {
+                "name": "console"
+            }]
         },
         {
             "item": "gpu",

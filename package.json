@@ -4,24 +4,34 @@
     "description": "Monitors PC temperatures, alerts if temps go over a threshold.",
     "main": "index.js",
     "scripts": {
+        "dev": "npm run build-cli && node index.js",
+        "build-cli": "./node_modules/.bin/webpack --config config/webpack.cli.js",
         "test": "./node_modules/.bin/mocha test/**/*.js -w",
         "coverage": "./node_modules/.bin/nyc --reporter=html --reporter=text --reporter=lcov ./node_modules/.bin/mocha test/**/*.js",
-        "test-parse": "node_modules/.bin/nearleyc ./src/rules/grammar.ne -o ./src/rules/grammar.js && node --inspect-brk ./src/rules/test.js"
+        "test-parse": "node_modules/.bin/nearleyc ./src/rules/grammar.ne -o ./src/rules/grammar.js && node --inspect-brk ./src/rules/test.js",
+        "jsx": "node_modules/.bin/babel ./src/reporters/console/app.jsx -d ."
     },
     "keywords": [
         "temperature",
         "alerter",
         "cpu"
     ],
+    "consoleApp": {
+        "path": "dist/console",
+        "filename": "app.js"
+    },
     "author": "Si Levy",
     "license": "ISC",
     "dependencies": {
+        "vue": "^2.5.2",
+        "blessed-vue": "^1.2.0",
         "byte-converter": "^0.1.4",
         "caller": "^1.0.1",
         "chalk": "^2.1.0",
         "cron-parser": "^2.4.1",
         "diskusage": "^0.2.2",
         "fs-extra": "^4.0.1",
+        "fsevents": "^1.1.2",
         "glob": "^7.1.2",
         "moment": "^2.18.1",
         "moo": "^0.4.2",
@@ -29,6 +39,7 @@
         "node-powershell": "^3.1.1",
         "node-schedule": "^1.2.4",
         "node-wmi": "0.0.4",
+        "osx-temperature-sensor": "^1.0.1",
         "systeminformation": "^3.23.7",
         "xml2js": "^0.4.17"
     },
@@ -37,6 +48,13 @@
         "mocha": "^3.5.0",
         "mock-require": "^2.0.2",
         "nyc": "^11.1.0",
-        "sinon": "^3.0.0"
+        "sinon": "^3.0.0",
+        "webpack": "^3.8.1",
+        "css-loader": "^0.28.4",
+        "node-sass": "^4.5.3",
+        "sass-loader": "^6.0.6",
+        "vue-loader": "^13.0.1",
+        "vue-template-compiler": "^2.3.4",
+        "webpack-node-externals": "^1.6.0"
     }
 }

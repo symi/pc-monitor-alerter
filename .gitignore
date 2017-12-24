@@ -4,3 +4,4 @@ CoreTempSMLs
 coverage
 .nyc_output
 .vscode
+dist

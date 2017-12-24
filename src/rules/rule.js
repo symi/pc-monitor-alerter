@@ -4,20 +4,35 @@ const nearley = require("nearley"),
 
 class Rule {
     constructor(ruleText) {
-        this._ruleText = ruleText;
-        this._parser = new nearley.Parser(
-            nearley.Grammar.fromCompiled(grammar)
-        );
-        try {
-            this._parser.feed(ruleText.toLowerCase());
-            this._ruleAST = this._parser.results[0];
-        } catch (err) {
-            console.log(err);
+        this._text = ruleText;
+
+        if (ruleText) {
+            this._parser = new nearley.Parser(
+                nearley.Grammar.fromCompiled(grammar)
+            );
+            try {
+                this._parser.feed(ruleText.toLowerCase());
+                this._ruleAST = this._parser.results[0];
+            } catch (err) {
+                // TODO: happy with this?
+                // if rule errors we say the reporter has no rules... atm anyway... might change
+                this._text = null;
+                console.log(err);
+            }
         }
+    }
+
+    get text() {
+        return this._text;
     }
 
     // TODO: split this up logically...
     test(watcher) {
+        // if no rule we can skip the check, as anything is allowed.
+        if (!this._text) {
+            return true;
+        }
+
         const anyFunction = (arr, fn) => arr.some(fn),
             allFunction = (arr, fn) => arr.every(fn),
             operatorFunction = this._ruleAST.operator.operatorFunction,

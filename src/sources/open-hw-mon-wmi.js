@@ -29,7 +29,7 @@ class OpenHWMonWMI extends WMIQuery {
         this.className = itemClass;
 
         let hwInstances = await this.query(["HardwareType", "Identifier"]),
-            itemConfigurations;
+            itemConfigurations = [];
 
         switch (itemName) {
             case "cpu":

@@ -102,6 +102,23 @@ describe("Configuration, when created", () => {
         });
     });
 
+    describe("the default reporters", () => {
+        it("a reporter config class should be created for each reporter and rule", function() {
+            let c = new Configuration(this.example),
+                reporterConfigs = [
+                    { name: "console-basic", rule: "temperature of any sensor > 0" },
+                    { name: "api", rule: undefined }
+                ];
+
+            expect(c.defaultReporters).to.have.lengthOf(reporterConfigs.length);
+
+            reporterConfigs.forEach((expectedReporterConfig, index) => {
+                expect(c.defaultReporters[index].rule).to.equal(expectedReporterConfig.rule);
+                expect(c.defaultReporters[index].name).to.equal(expectedReporterConfig.name);
+            });
+        });
+    });
+
     describe("the runners should be created", () => {
         it("with a runner class for each hw watcher", function() {
             delete this.example.swWatchers;

@@ -7,6 +7,7 @@ class ReporterConfiguration extends GetAndInstantiateMixin() {
         this._reporter = ReporterConfiguration._getAndInstantiate(
             `./${reporter}`
         );
+
         this._rule = new Rule(rule);
     }
 
