@@ -3,12 +3,19 @@ module.exports = {
         match: /(?:'|").+?(?:'|")/,
         value: x => x.replace(/("|')/g, "")
     },
-    aggregate: ["min", "average", "max", "delta"],
+    aggregate: ["min", "mean", "max", "delta", "sum"],
     measure: ["temperature", "usage", "speed"],
     item: /(?:cpu|gpu)s?/,
     sensor: /sensors?/,
     quantifier: ["any", "all"],
-    operator: [">", "<", "<=", ">=", "!=", "="],
+    operator: [
+        ">", "greater than",
+        "<", "less than",
+        "<=", "less than or equal to",
+        ">=", "greater than or equal to",
+        "!=", "not equal to", "is not",
+        "=", "equals", "equal to", "is"
+    ],
     punctuation: [",", ".", ";"],
     nonzeronumber: /[0-9]*[1-9][0-9]*/,
     number: /[0-9]+/,
