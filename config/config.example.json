@@ -2,7 +2,7 @@
     "scheduler": "*/2 * * * * *",
     "sources": [
         "open-hw-mon-wmi",
-        "systeminformation",
+        "system-information",
         "os",
         "avira-wmi",
         "diskusage",

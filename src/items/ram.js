@@ -1,8 +1,8 @@
 const Item = require("./item");
 
 class RAM extends Item {
-    constructor() {
-        super();
+    constructor(identifier, measureConfiguration) {
+        super(identifier, measureConfiguration, "ram");
     }
 }
 

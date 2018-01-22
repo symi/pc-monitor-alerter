@@ -3,12 +3,12 @@ const path = require("path");
 
 (async () => {
     try {
-    let builder = new ConfigurationBuilder(
-            path.resolve(__dirname, "./config/config.json")
-        ),
-        configuration = await builder.getConfiguration();
+        let builder = new ConfigurationBuilder(
+                path.resolve(__dirname, "./config/config.json")
+            ),
+            configuration = await builder.getConfiguration();
 
-
+        // TODO: configuration runner?
         configuration.runners.forEach(runner => runner.start());
     } catch (err) {
         console.error(err);

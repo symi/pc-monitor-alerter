@@ -29,7 +29,7 @@ class Runner {
         try {
             // see which sources are current available and only pass them to the watcher.
             // again we dont care getData is async. TODO: are we sure we dont care???
-            await /* <-- remove */ this.watcher.getData(
+            await /* <-- TODO: remove */ this.watcher.getData(
                 await Runner._getAvailableSources(this.sources)
             );
 

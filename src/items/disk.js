@@ -1,8 +1,8 @@
 const Item = require("./item");
 
 class Disk extends Item {
-    constructor() {
-        super();
+    constructor(identifier, measureConfiguration) {
+        super(identifier, measureConfiguration, "disk");
     }
 }
 
