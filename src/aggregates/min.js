@@ -2,13 +2,13 @@ const Aggregate = require("./aggregate");
 
 class Min extends Aggregate {
     constructor() {
-        super();
+        super('min');
     }
 
     /**
      * Calculates the minimum aggregate value of the record, comparing current value,
      * to previous minimum aggregate value.
-     * 
+     *
      * @param {number} currentValue The current records value.
      * @param {number} [previousValue] The previous records value, can be undefied if first run or historic persistance count = 1.
      * @param {Aggregate} [previousAggregate] The previous records Min aggregate object, can be undefied if first run or historic persistance count = 1

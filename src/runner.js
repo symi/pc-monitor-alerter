@@ -38,7 +38,7 @@ class Runner {
                     reporterConfiguration.reporter.report(this.watcher); // this is probably async
             });
         } catch (err) {
-            console.error(err);
+            console.error(err); // TODO: better error handling... async func so this even require its going to knock out the whole runner loop.
         }
     }
 

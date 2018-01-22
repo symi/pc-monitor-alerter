@@ -2,7 +2,7 @@ const Aggregate = require("./aggregate");
 
 class Sum extends Aggregate {
     constructor() {
-        super();
+        super('sum');
     }
 
     /**

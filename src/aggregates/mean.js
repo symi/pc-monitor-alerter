@@ -2,7 +2,7 @@ const Aggregate = require("./aggregate");
 
 class Mean extends Aggregate {
     constructor() {
-        super();
+        super('mean');
     }
 
     /**

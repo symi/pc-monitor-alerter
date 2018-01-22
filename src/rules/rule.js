@@ -1,6 +1,7 @@
 const nearley = require("nearley"),
     grammar = require("./grammar"),
-    ast = require("./ast");
+    ast = require("./ast"),
+    { compact } = require('lodash');
 
 class Rule {
     constructor(ruleText) {
@@ -17,7 +18,8 @@ class Rule {
                 // TODO: happy with this?
                 // if rule errors we say the reporter has no rules... atm anyway... might change
                 this._text = null;
-                console.log(err);
+                // TODO: make all these logs/warns/throws consistent
+                console.warn(err.message);
             }
         }
     }
@@ -33,13 +35,13 @@ class Rule {
             return true;
         }
 
-        const anyFunction = (arr, fn) => arr.some(fn),
+        const anyFunction = (arr, fn) => arr.some(fn), // TODO: because this bails early so doesnt mark all values as failed.
             allFunction = (arr, fn) => arr.every(fn),
             operatorFunction = this._ruleAST.operator.operatorFunction,
             limitValue = this._ruleAST.limit.value,
             expression = this._ruleAST.expression;
 
-        let actualItems, actualMeasures, actualRecords, actualValues;
+        let actualItems, actualMeasures, actualRecords, actualRecordsAndAggs;
 
         let instanceLogicalFunction, recordLogicalFunction;
 
@@ -71,16 +73,16 @@ class Rule {
         }
 
         // measures
-        actualMeasures = actualItems.map(item =>
+        actualMeasures = compact(actualItems.map(item =>
             item.measures.find(
                 measure => measure.name === expression.measure.value
             )
-        );
+        ));
 
         // records
         actualRecords = actualMeasures.map(m => m.records);
 
-        actualRecords.map(records => {
+        actualRecords = actualRecords.map(records => {
             let filteredRecords = [];
 
             switch (expression.record.constructor) {
@@ -112,7 +114,7 @@ class Rule {
         });
 
         // value/aggregate value
-        actualValues = actualRecords.map(records => {
+        actualRecordsAndAggs = actualRecords.map(records => {
             let values = [];
             for (let record of records) {
                 if (expression.aggregate.value) {
@@ -122,10 +124,10 @@ class Rule {
                     );
 
                     if (aggregate) {
-                        values.push(aggregate.value);
+                        values.push(aggregate);
                     }
                 } else {
-                    values.push(record.value);
+                    values.push(record);
                 }
             }
 
@@ -133,10 +135,10 @@ class Rule {
         });
 
         // actually do the checking of values against limit
-        return instanceLogicalFunction(actualValues, recordValues =>
-            recordLogicalFunction(recordValues, value =>
-                operatorFunction(value, limitValue)
-            )
+        // no values then always pass the rule to allow the report to show this
+        return !actualRecordsAndAggs.length || instanceLogicalFunction(actualRecordsAndAggs, recordsAndAggs =>
+            recordLogicalFunction(recordsAndAggs, recordOrAgg =>
+                recordOrAgg.test(operatorFunction, limitValue))
         );
     }
 }

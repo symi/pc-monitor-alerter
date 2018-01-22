@@ -1,6 +1,7 @@
-const ConfigEntity = require("../config-entity");
+const ConfigEntity = require("../config-entity"),
+    { Testable } = require("../mixins");
 
-class Aggregate extends ConfigEntity {
+class Aggregate extends Testable(ConfigEntity) {
     constructor(name) {
         super(name);
         this._value = undefined;
@@ -10,8 +11,8 @@ class Aggregate extends ConfigEntity {
     /**
      * Calculates the aggregate value for the current record.
      * Updates the dataCount property to be increased by 1 from the previous aggregate.
-     * 
-     * 
+     *
+     *
      * @param {any} currentValue The current records value.
      * @param {any} [previousValue] The previous records value, can be undefied if first run or historic persistance count = 1.
      * @param {Aggregate} [previousAggregate] The previous records matching aggregate object type, can be undefied if first run or historic persistance count = 1
@@ -29,7 +30,7 @@ class Aggregate extends ConfigEntity {
 
     /**
      * The current value of the aggregate.
-     * 
+     *
      * @readonly
      * @memberof Aggregate
      */
@@ -39,7 +40,7 @@ class Aggregate extends ConfigEntity {
 
     /**
      * The current data count value of the aggregate.
-     * 
+     *
      * @readonly
      * @memberof Aggregate
      */

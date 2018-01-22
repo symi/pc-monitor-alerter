@@ -12,7 +12,7 @@ exports.GetAndInstantiateMixin = (Base = DefaultBase) =>
             try {
                 ob = new (require(resolvedPath))(...ctorArgs);
             } catch (e) {
-                if (e.message.indexOf("Cannot find module") === -1)
+                //if (e.message.indexOf("Cannot find module") === -1)
                     console.warn(e);
                 //throw new Error(`Missing Class for path "${path}".`);
             }
@@ -20,3 +20,11 @@ exports.GetAndInstantiateMixin = (Base = DefaultBase) =>
             return ob;
         }
     };
+
+exports.Testable = (Base = DefaultBase) =>
+    class extends Base {
+        test(operatorFunction, limitValue) {
+            this.failure = operatorFunction(this.value, limitValue);
+            return this.failure;
+        }
+    }

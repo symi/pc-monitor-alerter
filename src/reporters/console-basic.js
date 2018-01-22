@@ -22,27 +22,26 @@ class ConsoleBasic extends Reporter {
                 ) + item.identifier + chalk.gray(")")}`
             );
             item.measures.forEach(measure => {
-                console.log(`   ${measure.name}`);
+                console.log(`  ${measure.name}`);
 
                 if (!measure.records) {
                     console.log(
-                        `       ${chalk.underline.redBright("NO-RECORD-DATA")}`
+                        `\t${chalk.underline.redBright("NO-RECORD-DATA")}`
                     );
                     return;
                 }
 
+                const unit = measure.unit;
+
                 for (let record of measure.records) {
-                    let val =
-                        record.value > 30 // TODO: have under, near and over states on record and aggregate.
-                            ? chalk.bold.redBright(record.value)
-                            : chalk.bold.greenBright(record.value);
+                    // TODO: have under, near and over states, triggering on record and aggregate, boundaries in config
+                    let formatter = record.failure ? chalk.bold.redBright : chalk.bold.blueBright;
+                    let val = formatter(`${record.value}${unit}`);
 
                     let aggVals = record.aggregates
                         .reduce((output, aggregate) => {
-                            let aggVal =
-                                record.value > 30
-                                    ? chalk.redBright(aggregate.value)
-                                    : chalk.greenBright(aggregate.value);
+                            formatter = aggregate.failure ? chalk.redBright : chalk.blueBright;
+                            let aggVal = formatter(`${aggregate.value}${unit}`);
 
                             output.push(
                                 chalk.gray("(") +
@@ -53,10 +52,10 @@ class ConsoleBasic extends Reporter {
                             );
                             return output;
                         }, [])
-                        .join();
+                        .join(' ');
 
                     console.log(
-                        `       ${chalk.bold(record.name)}  ${val}      ${aggVals}`
+                        `\t${chalk.bold(record.name)}\t${val}\t${aggVals}`
                     );
                 }
             });

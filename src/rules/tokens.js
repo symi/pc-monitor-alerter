@@ -4,7 +4,7 @@ module.exports = {
         value: x => x.replace(/("|')/g, "")
     },
     aggregate: ["min", "mean", "max", "delta", "sum"],
-    measure: ["temperature", "usage", "speed"],
+    measure: ["temperature", "utilisation", "speed"],
     item: /(?:cpu|gpu)s?/,
     sensor: /sensors?/,
     quantifier: ["any", "all"],

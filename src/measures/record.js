@@ -1,17 +1,20 @@
+const { Testable } = require('../mixins')
+
 /**
  * Class representing a key value pair of name and data.
  * multiple Records can make up a data sample for a Measure.
- * 
+ *
  * @class Record
  */
-class Record {
+class Record extends Testable() {
     /**
      * Creates an instance of Record.
-     * @param {string} name 
-     * @param {any} value 
+     * @param {string} name
+     * @param {any} value
      * @memberof Record
      */
     constructor(name, value) {
+        super();
         this.name = name;
         this.value = value;
         this._aggregates = [];
@@ -19,7 +22,7 @@ class Record {
 
     /**
      * Returns the aggregates for the record.
-     * 
+     *
      * @memberof Record
      */
     get aggregates() {
@@ -27,8 +30,8 @@ class Record {
     }
 
     /**
-     * Sets the aggregates for the record. Once set, aggregates can not be changed. 
-     * 
+     * Sets the aggregates for the record. Once set, aggregates can not be changed.
+     *
      * @memberof Record
      */
     set aggregates(aggregates = []) {

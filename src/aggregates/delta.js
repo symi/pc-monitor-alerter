@@ -2,7 +2,7 @@ const Aggregate = require("./aggregate");
 
 class Delta extends Aggregate {
     constructor() {
-        super();
+        super('delta');
     }
 
     /**

@@ -2,7 +2,7 @@ const Aggregate = require("./aggregate");
 
 class Max extends Aggregate {
     constructor() {
-        super();
+        super('max');
     }
 
     /**
