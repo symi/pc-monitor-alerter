@@ -11,6 +11,10 @@ class ConsoleBasic extends Reporter {
             "\n\n" + chalk.gray("======================================") + "\n"
         );
 
+        if (!watcher.items.length) {
+            console.log(`${chalk.underline.redBright(watcher.itemName.toUpperCase())} - ${chalk.underline.redBright("NO-ITEM-DATA")}`);
+        }
+
         watcher.items.forEach(item => {
             console.log(
                 `${watcher.itemName} ${chalk.gray(
@@ -19,6 +23,14 @@ class ConsoleBasic extends Reporter {
             );
             item.measures.forEach(measure => {
                 console.log(`   ${measure.name}`);
+
+                if (!measure.records) {
+                    console.log(
+                        `       ${chalk.underline.redBright("NO-RECORD-DATA")}`
+                    );
+                    return;
+                }
+
                 for (let record of measure.records) {
                     let val =
                         record.value > 30 // TODO: have under, near and over states on record and aggregate.

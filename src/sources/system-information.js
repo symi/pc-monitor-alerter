@@ -1,9 +1,12 @@
 const sysinfo = require("systeminformation"),
+    { converterBase2 } = require("byte-converter"),
+    { partialRight, countBy, transform } = require('lodash'),
     Source = require("./source"),
     ItemConfiguration = require("../items/item-configuration"),
     Record = require("../measures/record");
 
-const sourceName = "system-information";
+const sourceName = "system-information",
+    B2GB = partialRight(converterBase2, "B", "GB");
 
 class SystemInformation extends Source {
     constructor() {
@@ -16,21 +19,37 @@ class SystemInformation extends Source {
 
     async getInstances(itemName, instances) {
         let itemConfigurations = [];
+        
         switch (itemName) {
             case "cpu":
                 // system-information only returns 1 cpu
-                const {manufacturer, brand} = await sysinfo.cpu();
+                const { manufacturer, brand } = await sysinfo.cpu();
+
                 itemConfigurations.push(new ItemConfiguration(
                     itemName,
                     `${manufacturer} ${brand}`
                 ));
                 break;
-            case "gpu":
-            case "gpu-memory":
             case "ram":
+                // system-information only returs usage data as an overall
+                // get name from type and size
+                const mem = await sysinfo.memLayout();
+                const identifier = transform(
+                    countBy(mem.map(m => `${B2GB(m.size)}GB ${m.type}`)),
+                    (result, value, key) => result.push(`${value}x${key}`),
+                    []
+                ).join('+');
+
+                itemConfigurations.push(new ItemConfiguration(
+                    itemName,
+                    identifier
+                ));
+                break;
             case "disk":
                 // TODO: implement these
                 break;
+            case "gpu":
+            case "gpu-memory":
             default:
                 // any other item system-information doesnt support.
                 break;

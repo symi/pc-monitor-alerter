@@ -31,7 +31,10 @@ class HwWatcher extends Watcher {
 
         for (const item of this.items) {
             for (const source of sources) {
-                await source.getData(item); // TODO: code smell - inversion of control here
+                // TODO: code smell - inversion of control here, the iteration of
+                // measure etc should be made here and passed in rather than item.
+                // getDate should return Record array.
+                await source.getData(item);
 
                 // populated will be true if the source had all the required info
                 if (item.populated) {
@@ -45,7 +48,9 @@ class HwWatcher extends Watcher {
         if (!Array.isArray(measures)) measures = [measures];
 
         if (measures[0] === "all" || !measures.length) {
-            measures = ["temporature", "utilisation", "speed"]; // TODO: better way of setting/getting all, as adding anew measure will means a code change here as well.
+            // TODO: better way of setting/getting all, as adding anew measure
+            // will means a code change here as well.
+            measures = ["temperature", "utilisation", "speed"];
         }
 
         return measures;
@@ -55,7 +60,7 @@ class HwWatcher extends Watcher {
         if (!Array.isArray(aggregates)) aggregates = [aggregates];
 
         if (aggregates[0] === "all" || !aggregates.length) {
-            aggregates = ["min", "max", "avg", "delta"];
+            aggregates = ["min", "max", "mean", "delta", "sum"];
         }
 
         return aggregates;

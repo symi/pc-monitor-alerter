@@ -1,4 +1,5 @@
 const moment = require("moment"),
+    { compact } = require("lodash"),
     Scheduler = require("../scheduler"),
     WatcherFactory = require("../watchers/watcher-factory"),
     Runner = require("../runner"),
@@ -16,6 +17,10 @@ class Configuration extends GetAndInstantiateMixin() {
         );
 
         this._defaultHistoryCount = config.historyCount;
+
+        if (!this._runners.length) {
+            throw new Error("No watchers configured to run, check config/config.json file.");
+        }
     }
 
     get defaultScheduler() {
@@ -86,12 +91,12 @@ class Configuration extends GetAndInstantiateMixin() {
     /**
      * Gets the reporters for a node, whether that be the default reporters for all watchers,
      * or the reporters for a watcher.
-     * 
+     *
      * Default reporters are added to the watcher reporters, to make the final list of reporters
      * for each watcher. Rules on watcher reporters override rules on default reporters.
-     * 
-     * @param {object|Array<object>} [config=[]] 
-     * @param {boolean} [isDefault=false] 
+     *
+     * @param {object|Array<object>} [config=[]]
+     * @param {boolean} [isDefault=false]
      * @returns {Array<object>|ARray<Reporter>} An array of configuration objects or an array of reporter objects.
      * @memberof Configuration
      */
@@ -127,7 +132,7 @@ class Configuration extends GetAndInstantiateMixin() {
     /**
      * Gets the history count property for each watcher. If no historyCount prop is present
      * on the watcher config node, then the default historyCount prop is used.
-     * 
+     *
      * @private
      * @param {number} count The count of the watcher node.
      * @returns {number} The resolved count.
@@ -140,7 +145,9 @@ class Configuration extends GetAndInstantiateMixin() {
     }
 
     _getHwRunners(config = []) {
-        return Array.from(config).map(watcherConfig => {
+        return compact(Array.from(config).map(watcherConfig => {
+            if (watcherConfig.enabled === false) return;
+
             let watcher = WatcherFactory.createHwWatcher(
                     watcherConfig.item,
                     watcherConfig.measures,
@@ -160,11 +167,13 @@ class Configuration extends GetAndInstantiateMixin() {
                 scheduler,
                 reporterConfigurations
             );
-        });
+        }));
     }
 
     _getSwRunners(config = []) {
-        return Array.from(config).map(watcherConfig => {
+        return compact(Array.from(config).map(watcherConfig => {
+            if (watcherConfig.enabled === false) return;
+
             let watcher = WatcherFactory.createSwWatcher(
                     watcherConfig.item,
                     watcherConfig.measures,
@@ -183,7 +192,7 @@ class Configuration extends GetAndInstantiateMixin() {
                 scheduler,
                 reporterConfigurations
             );
-        });
+        }));
     }
 }
 
